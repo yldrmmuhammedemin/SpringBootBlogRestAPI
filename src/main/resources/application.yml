@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/blog_app
+    username: myusername
+    password: mypassword
+  jpa:
+    hibernate:
+      generate-ddl: true
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-paltform: org.hibernate.dialect.PostgreSQLDialect
