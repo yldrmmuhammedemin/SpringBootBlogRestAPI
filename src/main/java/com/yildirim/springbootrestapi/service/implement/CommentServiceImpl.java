@@ -26,21 +26,21 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = mapToEntity(commentDto);
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->
-                new ResourceNotFoundException("Posr", "id", postId));
+                new ResourceNotFoundException("Post", "id", postId));
         comment.setPost(post);
         Comment responseComment = commentRepository.save(comment);
         return mapToDto(responseComment);
     }
 
     @Override
-    public List<CommentDto> getAllPostComments(Long postId) {
+    public List<CommentDto> getAllPostComments(long postId) {
         List<Comment> comments = commentRepository.findByPostId(postId);
 
         return comments.stream().map(comment -> mapToDto(comment)).collect(Collectors.toList());
     }
 
     @Override
-    public CommentDto getCommentById(Long postId, Long commentId) {
+    public CommentDto getCommentById(long postId, long commentId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->
                         new ResourceNotFoundException("Post", "id", postId));
@@ -56,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto update(Long postId, Long commentId, CommentDto commentDto) {
+    public CommentDto update(long postId, long commentId, CommentDto commentDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->
                         new ResourceNotFoundException("Post", "id", postId));
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public String deleteComment(Long postId, Long commentId) {
+    public String deleteComment(long postId, long commentId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->
                         new ResourceNotFoundException("Post", "id", postId));
@@ -93,18 +93,18 @@ public class CommentServiceImpl implements CommentService {
     private CommentDto mapToDto(Comment comment){
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
-        commentDto.setName(commentDto.getName());
-        commentDto.setBody(commentDto.getBody());
-        commentDto.setEmail(commentDto.getEmail());
+        commentDto.setName(comment.getName());
+        commentDto.setBody(comment.getBody());
+        commentDto.setEmail(comment.getEmail());
         return commentDto;
     }
 
     private Comment mapToEntity(CommentDto commentDto){
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
-        comment.setName(comment.getName());
-        comment.setEmail(comment.getEmail());
-        comment.setBody(comment.getBody());
+        comment.setName(commentDto.getName());
+        comment.setEmail(commentDto.getEmail());
+        comment.setBody(commentDto.getBody());
         return comment;
     }
 }

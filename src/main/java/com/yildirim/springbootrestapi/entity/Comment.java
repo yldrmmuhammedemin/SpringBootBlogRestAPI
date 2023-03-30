@@ -17,13 +17,13 @@ public class Comment {
     )
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "body", nullable = false, unique = true)
+    @Column(name = "body")
     private String body;
 
     @ManyToOne(fetch = FetchType.EAGER)
