@@ -1,13 +1,15 @@
 package com.yildirim.springbootrestapi.service;
 
 import com.yildirim.springbootrestapi.payload.PostDto;
+import com.yildirim.springbootrestapi.response.PostResponse;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 public interface PostService {
     PostDto createPost(PostDto postDto);
 
-    List<PostDto> getAllPosts();
+    PostResponse getAllPosts(int pageNo, int PageSize, String sort, String sortDir);
 
     PostDto findPostById(Long postId);
 

@@ -4,8 +4,13 @@ import com.yildirim.springbootrestapi.entity.Post;
 import com.yildirim.springbootrestapi.exception.ResourceNotFoundException;
 import com.yildirim.springbootrestapi.payload.PostDto;
 import com.yildirim.springbootrestapi.repository.PostRepository;
+import com.yildirim.springbootrestapi.response.PostResponse;
 import com.yildirim.springbootrestapi.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,9 +32,34 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> postDtoList = postRepository.findAll();
-        return postDtoList.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+    public PostResponse getAllPosts(int pageNo, int pageSize, String sort, String sortDir) {
+        Sort sortBy = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sort)
+                :Sort.by(sort).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sortBy);
+        Page<Post> posts = postRepository.findAll(pageable);
+        List<Post> listOfPosts = posts.getContent();
+        List<PostDto> listOfPostDto = listOfPosts
+                .stream()
+                .map(post ->
+                        mapToDTO(post))
+                .collect(Collectors.toList());
+
+        PostResponse postResponse =
+                new PostResponse();
+        postResponse.
+                setLisOfPostDto(listOfPostDto);
+        postResponse.
+                setPageNo(posts.getNumber());
+        postResponse.
+                setPageSize(posts.getSize());
+        postResponse.
+                setTotalElements(posts.getTotalElements());
+        postResponse.
+                setTotalPages(postResponse.getTotalPages());
+        postResponse.
+                setLast(posts.isLast());
+
+        return postResponse;
     }
 
     @Override
@@ -46,9 +76,12 @@ public class PostServiceImpl implements PostService {
         Post responsePost = postRepository.findById(postId).
                 orElseThrow(()->
                         new ResourceNotFoundException("Post", "id", postId));
-        responsePost.setTitle(postDto.getTitle());
-        responsePost.setDescription(postDto.getDescription());
-        responsePost.setContent(postDto.getContent());
+        responsePost.
+                setTitle(postDto.getTitle());
+        responsePost.
+                setDescription(postDto.getDescription());
+        responsePost.
+                setContent(postDto.getContent());
         postRepository.save(responsePost);
         PostDto responsePostDto = mapToDTO(responsePost);
 
