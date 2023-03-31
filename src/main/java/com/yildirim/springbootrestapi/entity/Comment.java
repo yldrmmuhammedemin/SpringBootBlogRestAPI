@@ -26,8 +26,8 @@ public class Comment {
     @Column(name = "body")
     private String body;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post", nullable = false)
     private Post post;
 
 }

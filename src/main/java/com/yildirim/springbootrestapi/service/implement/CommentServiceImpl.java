@@ -9,6 +9,7 @@ import com.yildirim.springbootrestapi.repository.CommentRepository;
 import com.yildirim.springbootrestapi.repository.PostRepository;
 import com.yildirim.springbootrestapi.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final ModelMapper modelMapper;
     @Override
     public CommentDto createComment(long postId, CommentDto commentDto) {
         Comment comment = mapToEntity(commentDto);
@@ -91,20 +93,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private CommentDto mapToDto(Comment comment){
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(comment.getId());
-        commentDto.setName(comment.getName());
-        commentDto.setBody(comment.getBody());
-        commentDto.setEmail(comment.getEmail());
+        CommentDto commentDto = modelMapper.map(comment,CommentDto.class);
         return commentDto;
     }
 
     private Comment mapToEntity(CommentDto commentDto){
-        Comment comment = new Comment();
-        comment.setId(commentDto.getId());
-        comment.setName(commentDto.getName());
-        comment.setEmail(commentDto.getEmail());
-        comment.setBody(commentDto.getBody());
+        Comment comment = modelMapper.map(commentDto, Comment.class);
         return comment;
     }
 }
