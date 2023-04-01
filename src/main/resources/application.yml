@@ -13,3 +13,12 @@ spring:
         format_sql: true
     database: postgresql
     database-paltform: org.hibernate.dialect.PostgreSQLDialect
+
+  jwt:
+    header: Authorization ("\${jwt.header}")
+    secret: mySecret
+    expiration: 604800
+    route:
+      authentication:
+        path: auth
+        refresh: refresh
