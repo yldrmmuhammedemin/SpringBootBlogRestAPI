@@ -28,11 +28,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto createPost(PostDto postDto) {
         Post post = mapToEntity(postDto);
-        Category category = categoryRepository.findById(postDto.getCategoryDto().getId())
+        Category category = categoryRepository.findById(postDto.getCategoryId())
                 .orElseThrow(()->
                         new ResourceNotFoundException("Category",
                                 "Id",
-                                postDto.getCategoryDto().getId()
+                                postDto.getCategoryId()
                         ));
         post.setCategory(category);
         Post responsePost = postRepository.save(post);
@@ -91,11 +91,11 @@ public class PostServiceImpl implements PostService {
                 setDescription(postDto.getDescription());
         responsePost.
                 setContent(postDto.getContent());
-        Category category = categoryRepository.findById(postDto.getCategoryDto().getId())
+        Category category = categoryRepository.findById(postDto.getCategoryId())
                 .orElseThrow(()->
                         new ResourceNotFoundException("Category",
                                 "Id",
-                                postDto.getCategoryDto().getId()
+                                postDto.getCategoryId()
                         ));
         responsePost.setCategory(category);
         postRepository.save(responsePost);
@@ -108,6 +108,16 @@ public class PostServiceImpl implements PostService {
     public String deletePostById(Long postId) {
         postRepository.deleteById(postId);
         return "Successfully Deleted.";
+    }
+
+    @Override
+    public List<PostDto> getPostsByCategory(Long categoryId) {
+        List<Post> posts = postRepository.findByCategoryId(categoryId);
+        List<PostDto> postDtos = posts
+                .stream()
+                .map(post -> mapToDTO(post))
+                .collect(Collectors.toList());
+        return postDtos;
     }
 
     private PostDto mapToDTO(Post post){

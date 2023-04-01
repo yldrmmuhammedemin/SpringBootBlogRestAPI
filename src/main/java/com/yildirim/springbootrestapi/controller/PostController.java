@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
@@ -46,5 +48,12 @@ public class PostController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable(name = "id") Long postId){
         return ResponseEntity.ok(postService.deletePostById(postId));
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<PostDto>> getPostsByCategory(
+            @PathVariable(name = "id") Long categoryId
+    ){
+        return new ResponseEntity<>(postService.getPostsByCategory(categoryId),HttpStatus.OK);
     }
 }
