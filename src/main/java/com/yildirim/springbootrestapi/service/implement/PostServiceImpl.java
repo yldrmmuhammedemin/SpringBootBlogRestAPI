@@ -1,10 +1,13 @@
 package com.yildirim.springbootrestapi.service.implement;
 
+import com.yildirim.springbootrestapi.entity.Category;
 import com.yildirim.springbootrestapi.entity.Post;
 import com.yildirim.springbootrestapi.exception.ResourceNotFoundException;
 import com.yildirim.springbootrestapi.payload.PostDto;
+import com.yildirim.springbootrestapi.repository.CategoryRepository;
 import com.yildirim.springbootrestapi.repository.PostRepository;
 import com.yildirim.springbootrestapi.response.PostResponse;
+import com.yildirim.springbootrestapi.service.CategoryService;
 import com.yildirim.springbootrestapi.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,10 +25,17 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
-
+    private final CategoryRepository categoryRepository;
     @Override
     public PostDto createPost(PostDto postDto) {
         Post post = mapToEntity(postDto);
+        Category category = categoryRepository.findById(postDto.getCategoryDto().getId())
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Category",
+                                "Id",
+                                postDto.getCategoryDto().getId()
+                        ));
+        post.setCategory(category);
         Post responsePost = postRepository.save(post);
         PostDto postResponse = mapToDTO(responsePost);
         return postResponse;
@@ -82,6 +92,13 @@ public class PostServiceImpl implements PostService {
                 setDescription(postDto.getDescription());
         responsePost.
                 setContent(postDto.getContent());
+        Category category = categoryRepository.findById(postDto.getCategoryDto().getId())
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Category",
+                                "Id",
+                                postDto.getCategoryDto().getId()
+                        ));
+        responsePost.setCategory(category);
         postRepository.save(responsePost);
         PostDto responsePostDto = mapToDTO(responsePost);
 
