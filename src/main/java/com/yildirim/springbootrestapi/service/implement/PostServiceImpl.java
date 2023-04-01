@@ -7,7 +7,6 @@ import com.yildirim.springbootrestapi.payload.PostDto;
 import com.yildirim.springbootrestapi.repository.CategoryRepository;
 import com.yildirim.springbootrestapi.repository.PostRepository;
 import com.yildirim.springbootrestapi.response.PostResponse;
-import com.yildirim.springbootrestapi.service.CategoryService;
 import com.yildirim.springbootrestapi.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
