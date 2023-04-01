@@ -12,8 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "posts",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})}
+        name = "posts"
 )
 public class Post {
     @Id
@@ -22,7 +21,7 @@ public class Post {
     )
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
     @Column(name = "description", nullable = false)

@@ -6,19 +6,10 @@ spring:
   jpa:
     hibernate:
       generate-ddl: true
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     database: postgresql
     database-paltform: org.hibernate.dialect.PostgreSQLDialect
-
-  jwt:
-    header: Authorization ("\${jwt.header}")
-    secret: mySecret
-    expiration: 604800
-    route:
-      authentication:
-        path: auth
-        refresh: refresh
