@@ -2,10 +2,12 @@ package com.yildirim.springbootrestapi.service.implement;
 
 import com.yildirim.springbootrestapi.entity.Category;
 import com.yildirim.springbootrestapi.entity.Post;
+import com.yildirim.springbootrestapi.entity.User;
 import com.yildirim.springbootrestapi.exception.ResourceNotFoundException;
 import com.yildirim.springbootrestapi.payload.PostDto;
 import com.yildirim.springbootrestapi.repository.CategoryRepository;
 import com.yildirim.springbootrestapi.repository.PostRepository;
+import com.yildirim.springbootrestapi.repository.UserRepository;
 import com.yildirim.springbootrestapi.response.PostResponse;
 import com.yildirim.springbootrestapi.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +32,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
     @Override
     public PostDto createPost(PostDto postDto) {
         Post post = mapToEntity(postDto);
@@ -34,7 +42,9 @@ public class PostServiceImpl implements PostService {
                                 "Id",
                                 postDto.getCategoryId()
                         ));
+        User user = userRepository.findByEmail(authanticatedUsername()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
         post.setCategory(category);
+        post.setUser(user);
         Post responsePost = postRepository.save(post);
         PostDto postResponse = mapToDTO(responsePost);
         return postResponse;
@@ -128,5 +138,12 @@ public class PostServiceImpl implements PostService {
     private Post mapToEntity(PostDto postDto){
         Post post = modelMapper.map(postDto, Post.class);
         return post;
+    }
+
+    private String authanticatedUsername(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        return username;
     }
 }
