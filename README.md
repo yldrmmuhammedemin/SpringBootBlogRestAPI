@@ -18,11 +18,14 @@ You need to have Java version 20 to run the project. You must have Docker on you
 ## Screenshots
 
 Endpoints on Swagger UI
+
 ![Screenshot1](https://user-images.githubusercontent.com/77511870/229730865-8a282804-a3e2-42af-8978-6d09ac65c3a9.png)
 
 Register and authantication processes
+
 ![Screenshot2](https://user-images.githubusercontent.com/77511870/229730920-a8d1dcfc-7f65-4aab-b06d-6f5c1a2efcf4.png)
 ![Screenshot3](https://user-images.githubusercontent.com/77511870/229730960-c7e6b366-f171-458c-a03f-934faba89f12.png)
 
 Database schemas
+
 <img width="446" alt="Screenshot4" src="https://user-images.githubusercontent.com/77511870/229731015-a98ac082-ad57-4908-a90f-e2fe072b3f73.png">
