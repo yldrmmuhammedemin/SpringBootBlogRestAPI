@@ -12,6 +12,7 @@ You need to have Java version 20 to run the project. You must have Docker on you
   docker exec -it postgres bash
   psql -U myusername
   CREATE DATABASE blog_post
+  http://localhost:8080/swagger-ui/index.html#/
 ```
 
 
